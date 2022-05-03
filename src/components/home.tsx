@@ -1,20 +1,9 @@
-import { useMethodAuth } from "./hooks/useMethodAuth";
-
-
-
 const Home = () => {
-
-
-  const {  AuthSignOut }= useMethodAuth();
-
-  return(
-
+  return (
     <section>
-
-    <h1>You have logged in</h1>
-    <button onClick={AuthSignOut}>Sign Out</button>
-  </section>
-    ) 
+      <h1>You have logged in</h1>
+    </section>
+  );
 };
 
 export default Home;

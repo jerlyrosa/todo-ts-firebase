@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
 import Home from "./components/home";
 import Login from "./components/login";
-import ThemeProvider from 'react-bootstrap/ThemeProvider'
-import { getAuth,  onAuthStateChanged } from "firebase/auth";
-
-
+import ThemeProvider from "react-bootstrap/ThemeProvider";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import Layout from "./components/layout";
+import Header from "./components/header";
 function App() {
-  const [ userGlobal, setUserGlobal] = useState<boolean | null >(null)
+  const [userGlobal, setUserGlobal] = useState<boolean | null>(null);
 
-
-    
-  useEffect(()=>{
+  useEffect(() => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -20,14 +18,22 @@ function App() {
         console.log("error");
       }
     });
-},[])
+  }, []);
 
   return (
     <ThemeProvider
       breakpoints={["xxxl", "xxl", "xl", "lg", "md", "sm", "xs", "xxs"]}
-   
     >
-      {userGlobal === null ?(<h1>Loading...</h1>): userGlobal === true ?(<Home/>):(<Login/>)}
+      <Layout>
+        <Header isUser={userGlobal} />
+        {userGlobal === null ? (
+          <h1>Loading...</h1>
+        ) : userGlobal === true ? (
+          <Home />
+        ) : (
+          <Login />
+        )}
+      </Layout>
     </ThemeProvider>
   );
 }
