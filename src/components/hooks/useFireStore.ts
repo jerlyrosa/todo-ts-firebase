@@ -6,13 +6,14 @@ import {
   doc,
   deleteDoc,
 } from "firebase/firestore";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { db } from "../../config/firebase";
 import { modelTaskData } from "../interface/index";
-import { UserEmail } from "../types/types";
 
-export const useMethodFireStore = ({ userEmail }: UserEmail) => {
+export const useMethodFireStore = () => {
   const COLLECTION: string = "user";
+
+  const userEmail = getAuth().currentUser?.email as string;
 
   const [docsData, setDocsData] = useState<modelTaskData[]>([]);
 

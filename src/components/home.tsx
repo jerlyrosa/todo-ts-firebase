@@ -7,7 +7,7 @@ import { UserEmail } from "./types/types";
 import { useMethodFireStore } from "./hooks/useFireStore";
 
 const Home = ({ userEmail }: UserEmail) => {
-  const { docsData } = useMethodFireStore({ userEmail });
+  const { docsData } = useMethodFireStore();
 
   return (
     <Container>
