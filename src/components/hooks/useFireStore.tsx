@@ -1,4 +1,11 @@
-import { collection, onSnapshot } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import {
+  collection,
+  onSnapshot,
+  setDoc,
+  doc,
+  deleteDoc,
+} from "firebase/firestore";
 import { useEffect, useState, useCallback } from "react";
 import { db } from "../../config/firebase";
 import { modelTaskData } from "../interface/index";
@@ -9,37 +16,48 @@ export const useMethodFireStore = ({ userEmail }: UserEmail) => {
 
   const [docsData, setDocsData] = useState<modelTaskData[]>([]);
 
-  const fakeData = { id: "userdefaul", description: "default task ", url: "/" };
+  const fakeData = { id: "id_defaul", description: "Default Task ", url: "/" };
 
   useEffect(() => {
-    const GetData = (): void => {
-      onSnapshot(collection(db, COLLECTION), (doc) => {
-        const data = doc.docs.map((doc) => [doc.id, doc.data()]);
-        const docdata: modelTaskData[] = [];
+    onSnapshot(collection(db, COLLECTION), (docCollection) => {
+      const data = docCollection.docs.map((doc) => [doc.id, doc.data()]);
+      const docdata: modelTaskData[] = [];
 
-        data.map((item) => {
-          const { description, url } = item[1] as modelTaskData;
-          const id: string = item[0] as string;
-
-          if (id === userEmail) {
+      data
+        .filter((item) => item[0] === userEmail)
+        .map((item) => {
+          const idUserColllection: string = item[0] as string;
+          console.log(idUserColllection);
+          const { description, url, id } = item[1] as modelTaskData;
+          if (idUserColllection === userEmail) {
+            console.log(id);
             docdata.push({
               id: id,
               description: description as string,
               url: url as string,
             });
-          } else {
-            docdata.push(fakeData);
           }
-          return 0;
         });
 
-        setDocsData(docdata);
+      if (docdata.length === 0) {
+        setDoc(doc(db, COLLECTION, userEmail), fakeData);
+      }
+      setDocsData(docdata);
+    });
+  }, []);
+
+  const deleteDocCompled = async (id: string): Promise<void> => {
+    await deleteDoc(doc(db, COLLECTION, id))
+      .then(() => {
+        console.log("File delete");
+      })
+      .catch((error) => {
+        console.error("Delete failed", error);
       });
-    };
-    GetData();
-  }, [fakeData, userEmail]);
+  };
 
   return {
     docsData,
+    deleteDocCompled,
   } as const;
 };

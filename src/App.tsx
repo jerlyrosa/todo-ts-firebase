@@ -5,6 +5,7 @@ import ThemeProvider from "react-bootstrap/ThemeProvider";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Layout from "./components/layout";
 import Header from "./components/header";
+import { Container } from "react-bootstrap";
 function App() {
   const [userGlobalState, setUserGlobalState] = useState<boolean | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>();
@@ -21,7 +22,6 @@ function App() {
       }
     });
   }, []);
-  // console.log(userGlobalState);
   return (
     <ThemeProvider
       breakpoints={["xxxl", "xxl", "xl", "lg", "md", "sm", "xs", "xxs"]}
@@ -29,7 +29,10 @@ function App() {
       <Layout>
         <Header isUser={userGlobalState} />
         {userGlobalState === null ? (
-          <h1>Loading...</h1>
+          <Container>
+
+          <h1 className="text-center">Loading...</h1>
+          </Container>
         ) : userGlobalState === true ? (
           <Home userEmail={userEmail as string} />
         ) : (
