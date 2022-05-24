@@ -1,6 +1,4 @@
- export interface FormInterface {
-        useremailaddress: { value: string };
-        userpassword: { value: string };
-      }
-
-
+export interface FormInterface {
+  useremailaddress: { value: string };
+  userpassword: { value: string };
+}

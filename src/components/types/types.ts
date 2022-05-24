@@ -1,3 +1,3 @@
 export type PropsChildrenType = {
-    children: JSX.Element[] | JSX.Element,
+  children: JSX.Element[] | JSX.Element;
 };

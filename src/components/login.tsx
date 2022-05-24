@@ -2,19 +2,13 @@ import { useState, SyntheticEvent } from "react";
 import { Stack, Button, Form, Container } from "react-bootstrap";
 import { useMethodAuth } from "./hooks/useMethodAuth";
 
-
 const Login = () => {
-
-  const { registerAuth  }= useMethodAuth();
+  const { registerAuth, singInWithGoogle } = useMethodAuth();
   const [isRegister, setIsRegister] = useState<boolean>(false);
 
-
   const onSummitFuntion = (e: SyntheticEvent): void => {
-
-
-      registerAuth(e,isRegister )
-
-  }
+    registerAuth(e, isRegister);
+  };
   return (
     <section
       style={{
@@ -32,15 +26,23 @@ const Login = () => {
         </h2>
         <Stack gap={3}>
           <Form onSubmit={onSummitFuntion}>
-            <Form.Group className="mb-3" >
+            <Form.Group className="mb-3">
               <Form.Label>Email address</Form.Label>
-        
-              <Form.Control type="email"  id="useremailaddress" placeholder="Enter email" />
+
+              <Form.Control
+                type="email"
+                id="useremailaddress"
+                placeholder="Enter email"
+              />
             </Form.Group>
 
-            <Form.Group className="mb-3" >
+            <Form.Group className="mb-3">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" id="userpassword" placeholder="Password" />
+              <Form.Control
+                type="password"
+                id="userpassword"
+                placeholder="Password"
+              />
             </Form.Group>
             <div>
               <Button
@@ -51,7 +53,11 @@ const Login = () => {
               </Button>
             </div>
           </Form>
-          <Button variant="primary" type="submit">
+          <Button
+            variant="primary"
+            type="submit"
+            onClick={() => singInWithGoogle()}
+          >
             sign in with google
           </Button>
 

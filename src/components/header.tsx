@@ -1,8 +1,8 @@
 import { Navbar, Container, Button } from "react-bootstrap";
 import { useMethodAuth } from "./hooks/useMethodAuth";
 type data = {
-    isUser:  boolean | null
-}
+  isUser: boolean | null;
+};
 const Header = (isUser: data): JSX.Element => {
   const { AuthSignOut } = useMethodAuth();
 
@@ -12,7 +12,7 @@ const Header = (isUser: data): JSX.Element => {
         <Navbar.Brand href="#home">Todo App with Ts</Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
-          {isUser.isUser=== true && (
+          {isUser.isUser === true && (
             <Button onClick={AuthSignOut} variant="outline-light">
               Sign Out
             </Button>

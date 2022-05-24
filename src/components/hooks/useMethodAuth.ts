@@ -3,6 +3,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  signInWithRedirect,
+  GoogleAuthProvider,
 } from "firebase/auth";
 import { SyntheticEvent } from "react";
 import { app } from "../../config/firebase";
@@ -10,20 +12,22 @@ import { FormInterface } from "../interface";
 export const useMethodAuth = () => {
 
   const auth = getAuth(app);
-
   
-  const registerAuth = async (e: SyntheticEvent, isNewUser:boolean): Promise<void> => {
+  const googleProvider: GoogleAuthProvider = new GoogleAuthProvider();
+
+  const registerAuth = async (
+    e: SyntheticEvent,
+    isNewUser: boolean
+  ): Promise<void> => {
     e.preventDefault();
     const target = e.target as typeof e.target & FormInterface;
     const email: string = target.useremailaddress.value;
     const password: string = target.userpassword.value;
 
-    if(isNewUser){
-
+    if (isNewUser) {
       addUserAuth(email, password);
-    }else{
-      signInAuth(email, password)
-
+    } else {
+      signInAuth(email, password);
     }
   };
 
@@ -31,7 +35,6 @@ export const useMethodAuth = () => {
     email: string,
     password: string
   ): Promise<void> => {
-
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
@@ -58,7 +61,7 @@ export const useMethodAuth = () => {
         // Signed in
         const user = userCredential.user;
 
-       console.log("Signed: ",user.email)
+        console.log("Signed: ", user.email);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -80,8 +83,13 @@ export const useMethodAuth = () => {
       });
   };
 
+  const  singInWithGoogle = ():void =>{
+    signInWithRedirect(auth, googleProvider)
+  }
+
   return {
     AuthSignOut,
     registerAuth,
+    singInWithGoogle
   } as const;
 };
