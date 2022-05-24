@@ -6,30 +6,32 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Layout from "./components/layout";
 import Header from "./components/header";
 function App() {
-  const [userGlobal, setUserGlobal] = useState<boolean | null>(null);
+  const [userGlobalState, setUserGlobalState] = useState<boolean | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>();
 
   useEffect(() => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUserGlobal(true);
+        setUserGlobalState(true);
+        setUserEmail(user.email);
       } else {
-        setUserGlobal(false);
+        setUserGlobalState(false);
         console.log("error");
       }
     });
   }, []);
-
+  // console.log(userGlobalState);
   return (
     <ThemeProvider
       breakpoints={["xxxl", "xxl", "xl", "lg", "md", "sm", "xs", "xxs"]}
     >
       <Layout>
-        <Header isUser={userGlobal} />
-        {userGlobal === null ? (
+        <Header isUser={userGlobalState} />
+        {userGlobalState === null ? (
           <h1>Loading...</h1>
-        ) : userGlobal === true ? (
-          <Home />
+        ) : userGlobalState === true ? (
+          <Home userEmail={userEmail as string} />
         ) : (
           <Login />
         )}
