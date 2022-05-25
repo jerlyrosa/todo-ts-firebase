@@ -8,7 +8,7 @@ const TaskList = ({ dataList }: PropsTaskData): JSX.Element => {
   return (
     <Container>
       <Stack>
-        {dataList.map((data: modelTaskData, index: number) => {
+        {dataList?.tasks.map((data: modelTaskData, index: number) => {
           return (
             <div key={index}>
               <Row key={index}>

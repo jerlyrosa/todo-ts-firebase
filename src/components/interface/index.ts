@@ -4,11 +4,10 @@ export interface FormInterface {
 }
 
 export interface modelDataBase {
-  description: string;
-  url: string;
+  tasks: [];
 }
 
- export   interface modelTaskData {
+export interface modelTaskData {
   readonly id: string;
   description: string;
   url: string;

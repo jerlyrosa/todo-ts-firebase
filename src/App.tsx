@@ -30,8 +30,7 @@ function App() {
         <Header isUser={userGlobalState} />
         {userGlobalState === null ? (
           <Container>
-
-          <h1 className="text-center">Loading...</h1>
+            <h1 className="text-center">Loading...</h1>
           </Container>
         ) : userGlobalState === true ? (
           <Home userEmail={userEmail as string} />

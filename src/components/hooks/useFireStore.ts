@@ -4,51 +4,55 @@ import {
   onSnapshot,
   setDoc,
   doc,
-  deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../config/firebase";
-import { modelTaskData } from "../interface/index";
+import { modelDataBase, modelTaskData } from "../interface/index";
 
 export const useMethodFireStore = () => {
   const COLLECTION: string = "user";
 
   const userEmail = getAuth().currentUser?.email as string;
 
-  const [docsData, setDocsData] = useState<modelTaskData[]>([]);
+  const [docsData, setDocsData] = useState<modelDataBase>();
 
-  const fakeData = { id: "id_defaul", description: "Default Task ", url: "/" };
+  const fakeData = [
+    { id: "id_defaul", description: "Default Task ", url: "/" },
+  ];
 
   useEffect(() => {
     onSnapshot(collection(db, COLLECTION), (docCollection) => {
       const data = docCollection.docs.map((doc) => [doc.id, doc.data()]);
-      const docdata: modelTaskData[] = [];
+      let docdata: modelDataBase = { tasks: [] };
 
       data
         .filter((item) => item[0] === userEmail)
         .map((item) => {
           const idUserColllection: string = item[0] as string;
-          console.log(idUserColllection);
-          const { description, url, id } = item[1] as modelTaskData;
+          const tasks = item[1] as modelDataBase;
+
           if (idUserColllection === userEmail) {
-            console.log(id);
-            docdata.push({
-              id: id,
-              description: description as string,
-              url: url as string,
-            });
+            docdata = tasks;
           }
         });
 
-      if (docdata.length === 0) {
-        setDoc(doc(db, COLLECTION, userEmail), fakeData);
+      if (docdata.tasks.length === 0) {
+        setDoc(doc(db, COLLECTION, userEmail), { tasks: [...fakeData] });
       }
       setDocsData(docdata);
     });
   }, []);
 
   const deleteDocCompled = async (id: string): Promise<void> => {
-    await deleteDoc(doc(db, COLLECTION, id))
+    const ref = doc(db, COLLECTION, userEmail);
+
+    const dataFilter = docsData?.tasks.filter(
+      (item: modelTaskData) => item.id !== id
+    );
+    await updateDoc(ref, {
+      tasks: dataFilter,
+    })
       .then(() => {
         console.log("File delete");
       })

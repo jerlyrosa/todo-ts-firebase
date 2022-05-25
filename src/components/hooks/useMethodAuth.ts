@@ -10,9 +10,8 @@ import { SyntheticEvent } from "react";
 import { app } from "../../config/firebase";
 import { FormInterface } from "../interface";
 export const useMethodAuth = () => {
-
   const auth = getAuth(app);
-  
+
   const googleProvider: GoogleAuthProvider = new GoogleAuthProvider();
 
   const registerAuth = async (
@@ -61,13 +60,11 @@ export const useMethodAuth = () => {
         // Signed in
         const user = userCredential.user;
 
-        console.log("Signed: ", user.email);
+        console.log("Signed:", user.email);
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode);
-        console.log(errorMessage);
+        console.log(error.code);
+        console.log(error.message);
       });
   };
 
@@ -83,13 +80,13 @@ export const useMethodAuth = () => {
       });
   };
 
-  const  singInWithGoogle = ():void =>{
-    signInWithRedirect(auth, googleProvider)
-  }
+  const singInWithGoogle = (): void => {
+    signInWithRedirect(auth, googleProvider);
+  };
 
   return {
     AuthSignOut,
     registerAuth,
-    singInWithGoogle
+    singInWithGoogle,
   } as const;
 };
