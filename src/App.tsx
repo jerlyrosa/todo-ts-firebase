@@ -6,6 +6,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Layout from "./components/layout";
 import Header from "./components/header";
 import { Container } from "react-bootstrap";
+import FooterUI from "./footer";
 function App() {
   const [userGlobalState, setUserGlobalState] = useState<boolean | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>();
@@ -30,7 +31,9 @@ function App() {
         <Header isUser={userGlobalState} />
         {userGlobalState === null ? (
           <Container>
-            <h1 className="text-center">Loading...</h1>
+            <h1 className="text-center" style={{ margin: "25rem auto" }}>
+              Loading...
+            </h1>
           </Container>
         ) : userGlobalState === true ? (
           <Home userEmail={userEmail as string} />
@@ -38,6 +41,7 @@ function App() {
           <Login />
         )}
       </Layout>
+      <FooterUI />
     </ThemeProvider>
   );
 }

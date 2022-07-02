@@ -11,10 +11,13 @@ const TaskList = ({ dataList }: PropsTaskData): JSX.Element => {
         {dataList?.tasks.map((data: modelTaskData, index: number) => {
           return (
             <div key={index}>
-              <Row key={index}>
-                <Col md={7}>{data.description}</Col>
+              <Row key={index} className=" gap-2  gap-md-3   ga-lg-4">
+                <Col md={3} lg={4}>
+                  {data.title}
+                </Col>
+                <Col md={3}>{data.description}</Col>
                 <Col>
-                  <Button>View File</Button>
+                  <Button variant="secondary">Update Task</Button>
                 </Col>
                 <Col>
                   <Button

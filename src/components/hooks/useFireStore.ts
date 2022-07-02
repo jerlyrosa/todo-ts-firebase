@@ -1,4 +1,6 @@
 import { getAuth } from "firebase/auth";
+import { v4 as uuidv4 } from "uuid";
+
 import {
   collection,
   onSnapshot,
@@ -6,9 +8,11 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import { db } from "../../config/firebase";
 import { modelDataBase, modelTaskData } from "../interface/index";
+
+
 
 export const useMethodFireStore = () => {
   const COLLECTION: string = "user";
@@ -17,36 +21,83 @@ export const useMethodFireStore = () => {
 
   const [docsData, setDocsData] = useState<modelDataBase>();
 
-  const fakeData = [
-    { id: "id_defaul", description: "Default Task ", url: "/" },
-  ];
+
+
+
+  const ref = doc(db, COLLECTION, userEmail);
 
   useEffect(() => {
     onSnapshot(collection(db, COLLECTION), (docCollection) => {
       const data = docCollection.docs.map((doc) => [doc.id, doc.data()]);
       let docdata: modelDataBase = { tasks: [] };
 
-      data
-        .filter((item) => item[0] === userEmail)
-        .map((item) => {
+      const data2 = data.filter((item) => item[0] === userEmail);
+      const fakeData = [
+        {
+          id: "id_defaul",
+          title: "Default Task",
+          description: "This is the default task description",
+        },
+      ];
+    
+    
+      if (data2[0]?.length) {
+
+        
+        data2.map((item) => {
           const idUserColllection: string = item[0] as string;
           const tasks = item[1] as modelDataBase;
-
           if (idUserColllection === userEmail) {
             docdata = tasks;
           }
+          return true;
         });
-
-      if (docdata.tasks.length === 0) {
+      } else {
         setDoc(doc(db, COLLECTION, userEmail), { tasks: [...fakeData] });
       }
       setDocsData(docdata);
     });
-  }, []);
+  }, [ userEmail]);
+
+
+
+
+  const addFirebase = async (e: SyntheticEvent): Promise<void> => {
+    e.preventDefault();
+    const target = e.target as typeof e.target & {
+      name: { value: string };
+      decription: { value: string };
+    };
+    let nameTask: string = target.name.value;
+    let decriptionTak: string = !target.decription?.value
+      ? "Default  Deescription"
+      : target.decription.value;
+
+    const tasks = [
+      {
+        id: uuidv4(),
+        title: nameTask,
+        description: decriptionTak,
+      },
+    ];
+
+    docsData?.tasks.map((item) => {
+      tasks.push(item);
+      return true;
+    });
+
+    await setDoc(doc(db, COLLECTION, userEmail), { tasks })
+      .then(() => {
+        console.log("File available");
+      })
+      .catch((error) => {
+        console.error("Upload failed", error);
+      });
+  };
+
+
 
   const deleteDocCompled = async (id: string): Promise<void> => {
-    const ref = doc(db, COLLECTION, userEmail);
-
     const dataFilter = docsData?.tasks.filter(
       (item: modelTaskData) => item.id !== id
     );
@@ -64,5 +115,6 @@ export const useMethodFireStore = () => {
   return {
     docsData,
     deleteDocCompled,
+    addFirebase,
   } as const;
 };
