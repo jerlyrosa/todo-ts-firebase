@@ -12,17 +12,12 @@ import { SyntheticEvent, useEffect, useState } from "react";
 import { db } from "../../config/firebase";
 import { modelDataBase, modelTaskData } from "../interface/index";
 
-
-
 export const useMethodFireStore = () => {
   const COLLECTION: string = "user";
 
   const userEmail = getAuth().currentUser?.email as string;
 
   const [docsData, setDocsData] = useState<modelDataBase>();
-
-
-
 
   const ref = doc(db, COLLECTION, userEmail);
 
@@ -39,11 +34,8 @@ export const useMethodFireStore = () => {
           description: "This is the default task description",
         },
       ];
-    
-    
-      if (data2[0]?.length) {
 
-        
+      if (data2[0]?.length) {
         data2.map((item) => {
           const idUserColllection: string = item[0] as string;
           const tasks = item[1] as modelDataBase;
@@ -57,10 +49,7 @@ export const useMethodFireStore = () => {
       }
       setDocsData(docdata);
     });
-  }, [ userEmail]);
-
-
-
+  }, [userEmail]);
 
   const addFirebase = async (e: SyntheticEvent): Promise<void> => {
     e.preventDefault();
@@ -94,8 +83,6 @@ export const useMethodFireStore = () => {
         console.error("Upload failed", error);
       });
   };
-
-
 
   const deleteDocCompled = async (id: string): Promise<void> => {
     const dataFilter = docsData?.tasks.filter(

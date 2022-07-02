@@ -1,11 +1,16 @@
 import { Stack, Container, Col, Row, Button } from "react-bootstrap";
 import { useMethodFireStore } from "./hooks/useFireStore";
+import { useModal } from "./hooks/useModal";
 import { modelTaskData } from "./interface/index";
 import { PropsTaskData } from "./types/types";
 
 const TaskList = ({ dataList }: PropsTaskData): JSX.Element => {
   const { deleteDocCompled } = useMethodFireStore();
+
+  const { ModalView, openModal } = useModal();
+
   return (
+    <>
     <Container>
       <Stack>
         {dataList?.tasks.map((data: modelTaskData, index: number) => {
@@ -17,7 +22,10 @@ const TaskList = ({ dataList }: PropsTaskData): JSX.Element => {
                 </Col>
                 <Col md={3}>{data.description}</Col>
                 <Col>
-                  <Button variant="secondary">Update Task</Button>
+                  <Button variant="secondary" onClick={()=>openModal()}>Update Task</Button>
+
+
+          
                 </Col>
                 <Col>
                   <Button
@@ -34,6 +42,9 @@ const TaskList = ({ dataList }: PropsTaskData): JSX.Element => {
         })}
       </Stack>
     </Container>
+    <ModalView id={`test`}/>
+    </>
+
   );
 };
 
