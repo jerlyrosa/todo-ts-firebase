@@ -1,14 +1,15 @@
-import React, { useState } from "react";
-// import styled, { css } from "styled-components";
-import { css } from "@emotion/react";
+import React, { useState, SyntheticEvent } from "react";
 import styled from "@emotion/styled";
-// import { IconClose } from "../components/icons/icons";
-// import mq from "../components/styles/mq";
 import { Global } from "@emotion/react";
 import { IconClose } from "../icons/icons";
 import mq from "../mq";
+import { modelTaskData } from "../interface";
+import { Button } from "react-bootstrap";
+import { useMethodFireStore } from "./useFireStore";
 
 const useModal = () => {
+  const { updateFirebase } = useMethodFireStore();
+
   const [isModal, setCloseModal] = useState(false);
 
   const closeModal = () => {
@@ -18,13 +19,20 @@ const useModal = () => {
     setCloseModal(!isModal);
   };
 
-  const editModal = () => {
-    setCloseModal(!isModal);
-  };
   type Props = {
-    id: string 
+    data: modelTaskData | undefined;
   };
-  const ModalView = ({id}:Props): JSX.Element => {
+  const ModalView = ({ data }: Props): JSX.Element => {
+    const [currentValueTitle, setNewValueTitle] = useState(data?.title);
+    const [currentValueContent, setNewValueContent] = useState(
+      data?.description
+    );
+
+    const onSummitFuntion = (e: SyntheticEvent): void => {
+      updateFirebase(e, { data });
+      closeModal();
+    };
+
     return (
       <Container modal={isModal}>
         {isModal && <Global styles={{ body: { overflowY: "hidden" } }} />}
@@ -33,30 +41,31 @@ const useModal = () => {
           <CloseBottom onClick={closeModal}>
             <IconClose />
           </CloseBottom>
-          <Form>
-         <Label>
-             <Title >Update Task {id}</Title>
-             </Label>
+          <Form onSubmit={onSummitFuntion}>
+            <Label>
+              <Title>Update Task</Title>
+            </Label>
 
-             <TextInput
-                placeholder="Update The Title" 
-                value={""}
-                // onChange={""}
-                required={true}
-                
-             />
-         <TextTarea
-         placeholder="Update the Description" 
-        //  value={newValueContent} 
-        //  onChange={""}
-          />
-         <div>
-
-         </div>
-     </Form>
+            <TextInput
+              placeholder="Update The Title"
+              value={currentValueTitle}
+              id="name"
+              onChange={(e) => setNewValueTitle(e.target.value)}
+            />
+            <TextTarea
+              placeholder="Update the Description"
+              id="decription"
+              value={currentValueContent}
+              onChange={(e) => setNewValueContent(e.target.value)}
+            />
+            <ButtonWrapper>
+              <Button variant="secondary" type="submit">
+                Update Task
+              </Button>
+            </ButtonWrapper>
+          </Form>
         </Card>
       </Container>
-      
     );
   };
 
@@ -83,7 +92,7 @@ const Container = styled.div<propsStyles>`
   align-items: baseline;
   justify-content: center;
   position: absolute;
-    left: 0;
+  left: 0;
 `;
 
 const Card = styled.div`
@@ -118,10 +127,6 @@ const CloseBottom = styled.button`
   }
 `;
 
-
-
-
-
 const Form = styled.form`
   background-color: #fff;
   padding: 0 0 0 1rem;
@@ -129,7 +134,6 @@ const Form = styled.form`
   align-content: center;
   flex-direction: column;
   padding: 1rem;
-
 `;
 
 const Label = styled.label`
@@ -137,30 +141,27 @@ const Label = styled.label`
   display: flex;
   align-content: center;
   flex-direction: column;
-
 `;
 
 const Title = styled.h3`
   margin: 1rem auto;
-  color:${props =>  props.color};
+  color: ${(props) => props.color};
   font-weight: 500;
 `;
 
 const TextInput = styled.input`
   font-weight: 500;
   margin: 1rem 0;
-  padding: 1rem 0 1rem 2rem ;
+  padding: 1rem 0 1rem 2rem;
   border-top: none;
   border-left: none;
   border-right: none;
   border-color: #eeeeee;
   border-width: thin;
-
 `;
 
 // border-bottom-width: thin;
 // border-bottom-color
-
 
 const TextTarea = styled.textarea`
   resize: vertical;
@@ -169,15 +170,19 @@ const TextTarea = styled.textarea`
   border-left: none;
   border-right: none;
   font-weight: 500;
-  border-bottom-color:#eeeeee;
-
+  border-bottom-color: #eeeeee;
 
   max-height: 50vh;
-
+  height: 30rem;
   ${mq.md} {
     resize: auto;
     max-width: 45rem;
     min-width: 45rem;
     /* border: revert; */
   }
+`;
+
+const ButtonWrapper = styled.div`
+  align-self: center;
+  padding-top: 2rem;
 `;

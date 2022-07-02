@@ -84,6 +84,38 @@ export const useMethodFireStore = () => {
       });
   };
 
+  const updateFirebase = async (
+    e: SyntheticEvent,
+    { ...props }
+  ): Promise<void> => {
+    e.preventDefault();
+    const target = e.target as typeof e.target & {
+      name: { value: string };
+      decription: { value: string };
+    };
+    let nameTask: string = target.name.value;
+    let decriptionTaks: string = target.decription.value;
+
+    docsData?.tasks.map((item: modelTaskData) => {
+      if (item.id === props.data.id) {
+        item.title = nameTask;
+        item.description = decriptionTaks;
+      }
+
+      return true;
+    });
+
+    const tasks = docsData?.tasks;
+
+    await setDoc(doc(db, COLLECTION, userEmail), { tasks })
+      .then(() => {
+        console.log("File available");
+      })
+      .catch((error) => {
+        console.error("Upload failed", error);
+      });
+  };
+
   const deleteDocCompled = async (id: string): Promise<void> => {
     const dataFilter = docsData?.tasks.filter(
       (item: modelTaskData) => item.id !== id
@@ -103,5 +135,6 @@ export const useMethodFireStore = () => {
     docsData,
     deleteDocCompled,
     addFirebase,
+    updateFirebase,
   } as const;
 };
