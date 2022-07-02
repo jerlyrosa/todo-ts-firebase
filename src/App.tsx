@@ -7,6 +7,8 @@ import Layout from "./components/layout";
 import Header from "./components/header";
 import { Container } from "react-bootstrap";
 import FooterUI from "./footer";
+import styled from "@emotion/styled";
+
 function App() {
   const [userGlobalState, setUserGlobalState] = useState<boolean | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>();
@@ -27,23 +29,35 @@ function App() {
     <ThemeProvider
       breakpoints={["xxxl", "xxl", "xl", "lg", "md", "sm", "xs", "xxs"]}
     >
-      <Layout>
-        <Header isUser={userGlobalState} />
-        {userGlobalState === null ? (
-          <Container>
-            <h1 className="text-center" style={{ margin: "25rem auto" }}>
-              Loading...
-            </h1>
-          </Container>
-        ) : userGlobalState === true ? (
-          <Home userEmail={userEmail as string} />
-        ) : (
-          <Login />
-        )}
-      </Layout>
+      <Section>
+        <Layout>
+          <Header isUser={userGlobalState} />
+          {userGlobalState === null ? (
+            <Container>
+              <h1 className="text-center" style={{ margin: "25rem auto" }}>
+                Loading...
+              </h1>
+            </Container>
+          ) : userGlobalState === true ? (
+            <Home userEmail={userEmail as string} />
+          ) : (
+            <Login />
+          )}
+        </Layout>
+      </Section>
       <FooterUI />
     </ThemeProvider>
   );
 }
 
 export default App;
+
+const Section = styled.section`
+  /* align-items: center; */
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  max-width: 140rem;
+  min-height: 87vh;
+  overflow-wrap: anywhere;
+`;

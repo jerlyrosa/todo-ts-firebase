@@ -55,7 +55,7 @@ const Footer = styled.footer`
   background: #f5f5f5;
   padding: 2rem 1rem;
   width: 100%;
-  position: absolute;
+  position: relative;
   bottom: 0;
   text-align: center;
 `;
