@@ -81,18 +81,18 @@ type propsStyles = {
   modal: boolean;
 };
 const Container = styled.div<propsStyles>`
-  overflow-y: hidden;
-
-  background: rgba(0, 0, 0, 0.7);
-  display: ${(props) => (props.modal ? "flex" : "none")};
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  width: 100%;
-  align-items: baseline;
-  justify-content: center;
-  position: absolute;
-  left: 0;
+    overflow-y: hidden;
+    background: rgba(0, 0, 0, 0.7);
+    display: ${(props) => (props.modal ? "flex" : "none")};
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    width: 100%;
+    -webkit-box-align: baseline;
+    align-items: baseline;
+    -webkit-box-pack: center;
+    justify-content: center;
+    left:0;
 `;
 
 const Card = styled.div`
@@ -104,10 +104,11 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   min-width: 85vw;
+  align-self: center;
   word-wrap: break-word;
   ${mq.md} {
     min-width: 40rem;
-    margin: 10rem 1rem;
+    /* margin: 10rem 1rem; */
   }
 `;
 
@@ -152,7 +153,7 @@ const Title = styled.h3`
 const TextInput = styled.input`
   font-weight: 500;
   margin: 1rem 0;
-  padding: 1rem 0 1rem 2rem;
+  padding: 1rem 0 1rem 0rem;
   border-top: none;
   border-left: none;
   border-right: none;
@@ -165,7 +166,7 @@ const TextInput = styled.input`
 
 const TextTarea = styled.textarea`
   resize: vertical;
-  padding: 2rem 0 0 2rem;
+  /* padding: 2rem 0 0 2rem; */
   border-top: none;
   border-left: none;
   border-right: none;
@@ -173,7 +174,7 @@ const TextTarea = styled.textarea`
   border-bottom-color: #eeeeee;
 
   max-height: 50vh;
-  height: 30rem;
+  min-height: 20rem;
   ${mq.md} {
     resize: auto;
     max-width: 45rem;

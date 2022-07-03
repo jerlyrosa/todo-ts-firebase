@@ -17,7 +17,7 @@ const TaskList = ({ dataList }: PropsTaskData): JSX.Element => {
   };
 
   return (
-    <>
+    <div>
       <Container>
         <Stack>
           {dataList?.tasks.map((data: modelTaskData, index: number) => {
@@ -52,7 +52,8 @@ const TaskList = ({ dataList }: PropsTaskData): JSX.Element => {
         </Stack>
       </Container>
       <ModalView data={idTask} />
-    </>
+
+    </div>
   );
 };
 

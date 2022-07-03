@@ -53,7 +53,7 @@ function App() {
 export default App;
 
 const Section = styled.section`
-  /* align-items: center; */
+    /* position: relative; */
   display: flex;
   flex-direction: column;
   margin: 0 auto;
