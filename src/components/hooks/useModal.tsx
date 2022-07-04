@@ -93,6 +93,8 @@ const Container = styled.div<propsStyles>`
     -webkit-box-pack: center;
     justify-content: center;
     left:0;
+  z-index: 5;
+
 `;
 
 const Card = styled.div`

@@ -58,7 +58,7 @@ const Footer = styled.footer`
   position: relative;
   bottom: 0;
   text-align: center;
-  z-index: -1;
+  z-index: 0;
 `;
 const Container = styled.div`
   color: white;
